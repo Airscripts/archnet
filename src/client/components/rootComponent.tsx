@@ -31,24 +31,38 @@ interface IState {
  * hits the / endpoint.
  */
 class Root extends Component<AppProps, IState> {
-  constructor(props: AppProps) {
-    super(props);
+  async componentDidMount() {
+    console.log(1);
+    await this.props.loadRoot();
+    console.log(3);
+    this.test(this.props.root.root);
   }
 
-  async componentDidMount() {
-    await new Promise((resolve) => {
-      this.props.loadRoot();
-      resolve();
-    });
+  test(a: any) {
+    console.log(a);
   }
 
   render() {
-    return (
-      <React.Fragment>
-        <p>{this.props.root.root}</p>
-        <p>I'm Reacting.</p>
+    if (this.props.root.error) {
+      return (
+        <p>An error as occured.</p>
+      )
+    }
+
+    if (this.props.root.loading) {
+      return (
+        <p>Loading.</p>
+      );
+    }
+
+    else {
+      return (
+        <React.Fragment>
+          <p>{this.props.root.root}</p>
+          <p>I'm Reacting.</p>
       </React.Fragment>
-    );
+      );
+    }
   }
 }
 
